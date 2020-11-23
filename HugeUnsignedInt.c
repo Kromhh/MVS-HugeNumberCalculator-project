@@ -1,44 +1,38 @@
+#include <stdlib.h>
 #include <stdio.h>
-#include "HugeUnsignedInt.h"
+#include "IHMHugeNumber/ScanHugeNumber.h"
+#include "IHMHugeNumber/ShowHugeNumber.h"
 
-HugeUnsignedInt* createHugeUnsignedInt (void) {
-    return createDoublyLinkedList ();
-}
+#include "UseHugeNumber/Operator/HugeFloatOperator.h"
+#include "UseHugeNumber/Operator/HugeIntOperator.h"
+#include "UseHugeNumber/Operator/HugeUnsignedIntOperator.h"
 
-HugeUnsignedInt* createHugeUnsignedIntFromString (const char* digitString) {
-    return simplifyHugeUnsignedInt (createDoublyLinkedListFromString (digitString));
-}
+int main (void) {
+   
+    HugeFloat* op1 = createHugeFloatFromString ("1002315684321510", "-10");
+    HugeFloat* op2 = createHugeFloatFromString ("98745", "236");
+    HugeFloat* addition = addHugeFloat (op1, op2);
+    HugeFloat* substraction = substractHugeFloat (op1, op2);
+    HugeFloat* multiplication = multiplyHugeFloat (op1, op2);
+    HugeInt* division = divideHugeInt (op1->significand, op2->significand);
 
-HugeUnsignedInt* createHugeUnsignedIntFromHugeUnsignedInt (const HugeUnsignedInt* hugeUnsignedInt, const unsigned int size) {
-    HugeUnsignedInt* hugeUnsignedIntCopy = createHugeUnsignedInt ();
-    if ((hugeUnsignedIntCopy != NULL) && (hugeUnsignedInt != NULL)) {
-        Node* node = hugeUnsignedInt->start;
-        for (unsigned int i = 0; ((i < size) || (size == 0)) && !isNodeEmpty (node); i++) {
-            addDigitAtEnd (hugeUnsignedIntCopy, node->digit);
-            node = node->next;
-        }
-    }
-    return hugeUnsignedIntCopy;
-}
+    printHugeFloat (op1);
+    printHugeFloat (op2);
+    printf (" + = ");
+    printHugeFloat (addition);
+    printf (" - = ");
+    printHugeFloat (substraction);
+    printf (" x = ");
+    printHugeFloat (multiplication);
+    printf (" / = ");
+    printHugeInt (division);
 
-void deleteHugeUnsignedInt (HugeUnsignedInt* hugeUnsignedInt) {
-    deleteDoublyLinkedList (hugeUnsignedInt);
-}
+    deleteHugeFloat (op1);
+    deleteHugeFloat (op2);
 
-int getHugeUnsignedIntLength (const HugeUnsignedInt* hugeUnsignedInt) {
-    return getDoublyLinkedListLength (hugeUnsignedInt);
-}
-
-HugeUnsignedInt* simplifyHugeUnsignedInt (HugeUnsignedInt* hugeUnsignedInt) {
-    if (hugeUnsignedInt != NULL) {
-        char simplify = 1;
-        while ((!isNodeEmpty (hugeUnsignedInt->start)) && simplify) {
-            if ((hugeUnsignedInt->start->digit == 0) && hugeUnsignedInt->start != hugeUnsignedInt->end) {
-                removeStartFromDoublyLinkedList (hugeUnsignedInt);
-            } else {
-                simplify = 0;
-            }
-        }
-    }
-    return hugeUnsignedInt;
+    deleteHugeFloat (addition);
+    deleteHugeFloat (substraction);
+    deleteHugeFloat (multiplication);
+    deleteHugeInt (division);
+    return EXIT_SUCCESS;
 }
